@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processing</title>
+    <style>
+        /* CSS for UI */
+        body{
+            margin-top: 300px;
+            text-align: center;
+        }
+        
+        .processing {
+            display: none;
+        }
+        .success, .failure {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="processing">
+        <h2>Processing Payment...</h2>
+        <!-- Placeholder for processing UI -->
+    </div>
+
+    <div class="success">
+        <h2>Payment Successful!</h2>
+        <!-- Placeholder for success UI -->
+    </div>
+
+    <div class="failure">
+        <h2>Payment Failed!</h2>
+        <!-- Placeholder for failure UI -->
+    </div>
+
+    <button onclick="handlePayment()">Process Payment</button>
+
+    <script>
+        function processPayment() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const randomResult = Math.random() < 0.5 ? 'accepted' : 'rejected';
+                    if (randomResult === 'accepted') {
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }, 2000);
+            });
+        }
+
+        function showProcessingUI() {
+            document.querySelector('.processing').style.display = 'block';
+        }
+
+        function showSuccessUI() {
+            document.querySelector('.success').style.display = 'block';
+        }
+
+        function showFailureUI() {
+            document.querySelector('.failure').style.display = 'block';
+        }
+
+        function handlePayment() {
+            showProcessingUI();
+            processPayment()
+                .then(() => {
+                    showSuccessUI();
+                })
+                .catch(() => {
+                    showFailureUI();
+                });
+        }
+    </script>
+</body>
+</html>
