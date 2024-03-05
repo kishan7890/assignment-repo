@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch I</title>
+    <style>
+        #container{
+            
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+<script>
+    let body = document.getElementById("container");
+    let url = "https://reqres.in/api/users"
+
+    let response = fetch(url);
+    response.then((users)=>{
+        return users.json();
+    })
+    .then((users)=>{
+        users.data.forEach((element) => {
+            console.log(element);
+            createcard(element);
+        });
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+
+
+
+    function createcard(obj){
+        let div = document.createElement("div");
+        let img = document.createElement("img");
+        let firstname = document.createElement("h2");
+        let lastname = document.createElement("h2");
+
+        div.className = "card";
+        img.src = obj.avatar;
+        firstname.innerText = obj.first_name;
+        lastname.innerText = obj.last_name;
+
+        div.append(img,firstname,lastname);
+        body.append(div);
+    }
+</script>
+
+</html>
