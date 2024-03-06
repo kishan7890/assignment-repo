@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todos</title>
+</head>
+<body>
+    <h1>feching todos</h1>
+    <div id="container">
+
+    </div>
+</body>
+<script>
+    let body = document.getElementById("container");
+    let url = "https://jsonplaceholder.typicode.com/todos";
+    let response = fetch(url)
+    response.then((data)=>{
+        return data.json()
+    })
+    .then((data)=>{
+        console.log(data);
+        data.forEach(element => {
+        let div = document.createElement("div");
+        let title = document.createElement("p");
+        title.innerText = element.title;
+        div.append(title);
+        body.append(div);
+        });
+    })
+    .catch((Error)=>{
+        console.log(Error);
+    })
+</script>
+</html>
