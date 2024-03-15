@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fakestore</title>
+    <style>
+        #main {
+            display: flex;
+            
+            width: 100%
+        }
+
+        .filter {
+            width: 40%;
+            align-items: center;
+        }
+        
+        #container>div {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 50%;
+            /* Adjust width as needed */
+            display: grid;
+            grid-template-columns: repeat(2fr,2fr);
+            /* Add any other styles you want for the product cards */
+        }
+
+        #container>div img {
+            max-width: 100%;
+            /* Ensures the image doesn't exceed the container width */
+            height: 300px;
+            margin-bottom: 10px;
+        }
+
+        #container>div h3 {
+            font-size: 18px;
+            margin-top: 0;
+        }
+
+        #container>div h2 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        #container>div p {
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <form class="filter">
+            <h2>sort by category</h2>
+            <label><input type="checkbox" name="category" value="electronics">electronics</label><br>
+            <label><input type="checkbox" name="category" value="men's clothing">men's clothing</label><br>
+            <label><input type="checkbox" name="category" value="women's clothing">women's clothing</label><br>
+            <label><input type="checkbox" name="category" value="jewelery">jewelery</label><br>
+        </form>
+        <div class="search">
+            <input type="text" id="searchInput"><button id="searchButton">search</button>
+            <div id="container">
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let card = document.getElementById("container");
+    let filtered = document.getElementsByClassName("filter");
+
+
+
+    function createcard(obj) {
+        let div = document.createElement("div");
+        let title = document.createElement("p");
+        let price = document.createElement("h2");
+        let description = document.createElement("p");
+        let catogory = document.createElement("h3");
+        let image = document.createElement("img");
+
+        title.innerText = obj.title;
+        price.innerText = "price : "+obj.price;
+        description.innerText = obj.description;
+        catogory.innerText = obj.category;
+        image.src = obj.image;
+
+        div.append(catogory,image, price, title, description);
+        card.append(div);
+    }
+
+    function filterProducts() {
+        let checkboxes = document.querySelectorAll('input[name="category"]:checked');
+        let selectedCategories = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+        if (selectedCategories.length === 0) {
+        // If no checkboxes are selected, show all products
+        document.querySelectorAll("#container > div").forEach(product => {
+            product.style.display = "block";
+        });
+    } else {
+        // If checkboxes are selected, filter products based on selected categories
+        let products = document.querySelectorAll("#container > div");
+        products.forEach(product => {
+            let category = product.querySelector("h3").innerText;
+            if (selectedCategories.includes(category)) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    }
+    }
+
+    document.querySelectorAll('input[name="category"]').forEach(item => {
+        item.addEventListener('change', filterProducts);
+    });
+
+    function searchProducts() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let products = document.querySelectorAll("#container > div");
+
+        products.forEach(product => {
+            let title = product.querySelector("p").innerText.toLowerCase();
+            if (title.includes(input)) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    }
+
+    document.getElementById('searchButton').addEventListener('click', searchProducts);
+
+    let url = "https://fakestoreapi.com/products";
+
+    let response = fetch(url);
+    console.log(response);
+    response.then((data) => {
+        return data.json();
+    })
+        .then((data) => {
+            data.forEach(element => {
+                console.log(element)
+                createcard(element);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+</script>
+
+</html>
